@@ -1,0 +1,23 @@
+{
+  "name": "lmb-context-help-heading",
+  "authors": [
+    "Jeffrey Brayne <jeffrey.brayne@libertymutual.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffreybrayne/lmb-context-help-heading.git"
+  },
+  "main": "lmb-context-help-heading.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "neon-animation": "PolymerElements/neon-animation#~1.2.4",
+    "paper-dialog": "PolymerElements/paper-dialog#~1.1.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#~1.4.2"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

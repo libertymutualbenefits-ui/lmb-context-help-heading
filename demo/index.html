@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <title>lmb-context-help-heading demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../lmb-context-help-heading.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+
+    <div class="vertical-section-container centered">
+      <h3>Basic lmb-context-help-heading Demo</h3>
+      <demo-snippet>
+        <template>
+          <h1>Default Version</h1>
+          <lmb-context-help-heading></lmb-context-help-heading>
+
+          <h1>Custom Version</h1>
+          <lmb-context-help-heading
+            heading-content="This is custom text"
+            tag="h1"
+            title="Learn you some Shizzle"
+            content="Yo! Yolo."
+          ></lmb-context-help-heading>
+        </template>
+      </demo-snippet>
+    </div>
+
+  </body>
+</html>

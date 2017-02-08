@@ -1,0 +1,270 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html">
+
+<!--
+`<lmb-context-help-heading>` provides a way to attach a help icon to a heading (h1, h2, etc.) and launch
+a dialog with contextual help. If the user chooses to 'not show this again', a cookie is set to prevent
+the automatic launching of the dialog. Simply uncheck the box and the dialog will automatically launch again
+when loading the page.
+
+Example:
+
+`<lmb-context-help-heading heading-content="Heading that has help icon" tag="h1" title="Help Title" content="Consult your physician before engaging in rigorous exercise"></lmb-context-help-heading>`
+
+Cheers!
+Liberty Mutual Benefits
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="lmb-context-help-heading">
+  <template>
+    <style>
+      :host {
+        color: black;
+        display: inline-block;
+        font-family: 'Moderat', verdana, sans-serif;
+      }
+
+      @font-face {
+        font-family: 'Linearicons';
+        src:  url('linearicons/Linearicons.eot?oijgoer');
+        src:  url('linearicons/Linearicons.eot?oijgoer#iefix') format('embedded-opentype'),
+          url('linearicons/Linearicons.ttf?oijgoer') format('truetype'),
+          url('linearicons/Linearicons.woff?oijgoer') format('woff'),
+          url('linearicons/Linearicons.svg?oijgoer#Linearicons') format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      [class^="icon-"], [class*=" icon-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: 'Linearicons' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .icon-question-circle:before {
+        content: "\e957";
+      }
+
+      .icon-cross-circle:before {
+        content: "\e95a";
+      }
+
+      .heading {
+        display: inline-block !important;
+        float: left !important;
+      }
+
+      #help {
+        background: rgba(255, 255, 255, 0.9);
+        border: 3px solid black;
+        border-radius: 0.5rem;
+        padding: 1rem;
+      }
+
+      .icon-close {
+        cursor: pointer;
+        font-size: 1.25rem;
+        margin-left: 0.5rem;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        z-index: 9999;
+      }
+
+      .icon-help {
+        color: var(--very-light-gray);
+        cursor: pointer;
+        display: inline-block;
+        float: left;
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin-left: 0.5rem;
+        transition: 0.3s;
+      }
+
+      .icon-help:active, .icon-help:hover {
+        color: var(--light-gray);
+      }
+
+      .icon-help:before {
+        font-family: 'Linearicons' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        content: "\e957" !important;
+      }
+
+      .hide {
+        display: none;
+      }
+
+    </style>
+
+    <header id="header" class="context-help-header">
+      <div id="heading" class="heading">{{headingContent}}</div>
+      <span id="helpIcon" on-tap="_openDialog" class="icon-help icon-question-circle"></span>
+    </header>
+
+    <paper-dialog id="help" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <p><span class="icon-close icon-cross-circle" on-tap="_closeDialog"></span></p>
+      <h2>{{title}}</h2>
+      <p>{{content}}</p>
+      <paper-checkbox id="noShow" on-tap="_neverShowDialog" data-help-target$="{{target}}">Don't show this again *</paper-checkbox>
+      <p><sub>You can always launch this again by clicking the <span class="icon-question-circle"></span></sub></p>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'lmb-context-help-heading',
+
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+      properties: {
+
+        headingContent: {
+          type: String,
+          value: 'Default heading content'
+        },
+
+        tag: {
+          type: String,
+          value: 'h1'
+        },
+
+        content: {
+          type: String,
+          value: 'Default content'
+        },
+
+        title: {
+          type: String,
+          value: 'Default title'
+        }
+
+      },
+
+      _closeDialog: function() {
+        this.$.help.close();
+      },
+
+      _openDialog: function() {
+        var target = this.$.noShow.dataset.helpTarget;
+        var cookieName = 'neverShowHelpDialog-' + target;
+        this.$.noShow.checked = !!readCookie(cookieName);
+        var me = this;
+        setTimeout(function() {
+          console.log('what is this?', help);
+          me.$.help.open();
+          me.$.help.notifyResize();
+        }, 500);
+      },
+
+      _neverShowDialog: function() {
+        var target = this.$.noShow.dataset.helpTarget;
+        var cookieName = 'neverShowHelpDialog-' + target;
+        if(!!!readCookie(cookieName)) {
+          createCookie(cookieName);
+        } else {
+          eraseCookie(cookieName);
+        }
+      },
+
+      attached: function() {
+        var target = this.$.noShow.dataset.helpTarget;
+        var cookieName = 'neverShowHelpDialog-' + target;
+        if(!!!readCookie(cookieName)) {
+          this._openDialog();
+        }
+        this.$.heading.classList.add(this.tag);
+      },
+
+      open: function() {
+        var target = this.$.noShow.dataset.helpTarget;
+        var cookieName = 'neverShowHelpDialog-' + target;
+        this.$.noShow.checked = !!readCookie(cookieName);
+        var me = this;
+        setTimeout(function() {
+          me.$.help.open();
+          me.$.help.notifyResize();
+        }, 500);
+      },
+
+      setHelpTitle: function(title) {
+        this.set('title', title);
+      },
+
+      setHelpContent: function(content) {
+        this.set('content', content);
+      },
+
+      /** sets the element used for the heading content. Use h1, h2, h3, etc. */
+      setTag: function(tag) {
+        this.set('tag', tag);
+      },
+
+      setHelpContent: function(content) {
+        this.set('content', content);
+      },
+
+      setHeading: function(heading) {
+        this.set('heading', heading)
+      }
+
+    });
+
+    function createCookie(name,value,mins) {
+      if (mins) {
+            var now = new Date();
+            var time = now.getTime();
+            time += mins * 60 * 1000;
+            now.setTime(time);
+        var expires = "; expires="+now.toGMTString();
+      }
+      else var expires = "";
+      console.log('setting cookie ' + name + "=" + value + expires + "; path=/");
+      document.cookie = name+"="+value+expires+"; path=/";
+    }
+
+    function readCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+    }
+
+    function eraseCookie(name) {
+      createCookie(name,"",-1);
+    }
+
+  </script>
+
+</dom-module>
