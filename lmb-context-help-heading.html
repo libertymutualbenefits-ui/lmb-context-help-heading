@@ -121,6 +121,10 @@ Liberty Mutual Benefits
         display: none;
       }
 
+      #heading {
+        @apply(--heading-style);
+      }
+
     </style>
 
     <header id="header" class="context-help-header">
@@ -164,6 +168,11 @@ Liberty Mutual Benefits
         title: {
           type: String,
           value: 'Default title'
+        },
+
+        autoOpen: {
+          type: Boolean,
+          value: false
         }
 
       },
@@ -196,7 +205,7 @@ Liberty Mutual Benefits
       attached: function() {
         var target = this.$.noShow.dataset.helpTarget;
         var cookieName = 'neverShowHelpDialog-' + target;
-        if(!!!readCookie(cookieName)) {
+        if(!!!readCookie(cookieName) && this.get('autoOpen')) {
           this._openDialog();
         }
         this.$.heading.classList.add(this.tag);

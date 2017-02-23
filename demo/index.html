@@ -12,6 +12,14 @@
     <link rel="import" href="../lmb-context-help-heading.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+      lmb-context-help-heading {
+        --heading-style: {
+          font-size: 1.5rem;
+          font-weight: 900;
+          line-height: 1;
+          text-decoration: underline;
+        }
+      }
     </style>
   </head>
   <body>
@@ -27,8 +35,9 @@
           <lmb-context-help-heading
             heading-content="This is custom text"
             tag="h1"
-            title="Learn you some Shizzle"
-            content="Yo! Yolo."
+            title="This automatically opened"
+            content="This is a help modal that opened automatically by setting auto-open='true'"
+            auto-open="true"
           ></lmb-context-help-heading>
         </template>
       </demo-snippet>
