@@ -134,8 +134,8 @@ Liberty Mutual Benefits
 
     <paper-dialog id="help" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
       <p><span class="icon-close icon-cross-circle" on-tap="_closeDialog"></span></p>
-      <h2>{{title}}</h2>
-      <p>{{content}}</p>
+      <h2>{{dialogTitle}}</h2>
+      <p>{{dialogContent}}</p>
       <paper-checkbox id="noShow" on-tap="_neverShowDialog" data-help-target$="{{target}}">Don't show this again *</paper-checkbox>
       <p><sub>You can always launch this again by clicking the <span class="icon-question-circle"></span></sub></p>
     </paper-dialog>
@@ -155,17 +155,12 @@ Liberty Mutual Benefits
           value: 'Default heading content'
         },
 
-        tag: {
-          type: String,
-          value: 'h1'
-        },
-
-        content: {
+        dialogContent: {
           type: String,
           value: 'Default content'
         },
 
-        title: {
+        dialogTitle: {
           type: String,
           value: 'Default title'
         },
@@ -223,39 +218,31 @@ Liberty Mutual Benefits
       },
 
       setHelpTitle: function(title) {
-        this.set('title', title);
+        this.set('dialogTitle', title);
       },
 
       setHelpContent: function(content) {
-        this.set('content', content);
-      },
-
-      /** sets the element used for the heading content. Use h1, h2, h3, etc. */
-      setTag: function(tag) {
-        this.set('tag', tag);
-      },
-
-      setHelpContent: function(content) {
-        this.set('content', content);
+        this.set('dialogContent', content);
       },
 
       setHeading: function(heading) {
-        this.set('heading', heading)
+        this.set('headingContent', heading)
       }
 
     });
 
     function createCookie(name,value,mins) {
       if (mins) {
-            var now = new Date();
-            var time = now.getTime();
-            time += mins * 60 * 1000;
-            now.setTime(time);
+        var now = new Date();
+        var time = now.getTime();
+        time += mins * 60 * 1000;
+        now.setTime(time);
         var expires = "; expires="+now.toGMTString();
+      } else {
+        var expires = "";
+        console.log('setting cookie ' + name + "=" + value + expires + "; path=/");
+        document.cookie = name+"="+value+expires+"; path=/";
       }
-      else var expires = "";
-      console.log('setting cookie ' + name + "=" + value + expires + "; path=/");
-      document.cookie = name+"="+value+expires+"; path=/";
     }
 
     function readCookie(name) {
